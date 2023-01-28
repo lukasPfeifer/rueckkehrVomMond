@@ -1,0 +1,120 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{siunitx}
+\sisetup{locale=DE}
+\usepackage{a4}	
+\usepackage{epsfig}
+\usepackage{float} 
+\usepackage{ngerman}
+\usepackage{amsmath,amssymb,amstext}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{setspace} %(\onehalfspacing \doublespacing \singlespacing)
+\usepackage{eurosym} %Für € Symbol (\euro)
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{enumitem}
+%\pagestyle{empty} %Blendent Seitenzahlen aus
+%Kopfzeile
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{multicol}
+\setlength{\parindent}{0em}
+
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+\newcommand{\scal}[1]{\langle#1\rangle}
+
+\newcommand{\dS}{\\ \\}
+
+%Requires a math environment
+\newcommand{\ex}{\hat{e}_x}
+\newcommand{\ey}{\hat{e}_y}
+\newcommand{\ez}{\hat{e}_z}
+\newcommand{\et}{\hat{e}_\theta}
+\newcommand{\er}{\hat{e}_r}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\p}[2]{\frac{\partial#1}{\partial#2}}
+
+\newcommand{\wrongValue}[0]{\colorbox{red}{Falsche Werte}}
+\newcommand{\todo}[0]{\colorbox{green}{Todo:}}
+
+\newcommand{\vecValue}[1]{
+	\begin{pmatrix}
+		#1
+	\end{pmatrix}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\chead{Raketengleichung}
+\headsep 1cm
+\rfoot{\thepage} 
+
+\begin{document}
+	
+\section*{Raketengleichung} %Ausgangsströmungsgeschwindigkeit
+
+Die Raketengleichung beruht auf dem 3. Newtonsches Gesetz. Dies ist auch bekannt unter dem Namen des \textit{Wechselwirkungsprinzip} oder \textit{actio gleich reactio}.\\
+Der Impuls der Rakete ist definiert durch:\\
+
+$\begin{aligned}
+	p_R = m\cdot dv
+\end{aligned}$\\
+
+Der Impuls, der durch das Gas erzeugt wird ist definiert durch:\\
+
+$\begin{aligned}
+	p_G = u\cdot dm
+\end{aligned}$\\
+
+Durch actio $=$ reactio gilt:\\
+
+$\begin{aligned}
+	                &&-\tilde{m}\cdot d\tilde{v}           &=&& u \cdot d\tilde{m}\\
+	\Leftrightarrow &&-u^{-1}\cdot dv                      &=&& \tilde{m}^{-1} \cdot d\tilde{m}\\
+	\Leftrightarrow &&-\int_{0}^{v} u^{-1}\cdot d\tilde{v} &=&& \int_{m}^{m_0} \tilde{m}^{-1} \cdot dm\\
+	\Leftrightarrow && -\frac{v}{u}                        &=&& \ln(m_0) - \ln(m)\\
+	\Leftrightarrow && -\frac{v}{u}                        &=&& \ln\left(\frac{m_0}{m}\right)\\
+	\Leftrightarrow && v                                   &=&& -u\cdot \ln\left(\frac{m_0}{m}\right)\\
+	\Rightarrow     && v(m)                                &=&& -u\cdot \ln\left(\frac{m_0}{m}\right)\\
+	\Leftrightarrow && v(m)                                &=&& u\cdot \ln\left(\frac{m}{m_0}\right)
+\end{aligned}$\\
+
+Hier haben wir die Herleitung der Geschwindigkeit $v(m)$ der Raketengleichung in Abhängigkeit der Maße.\\
+
+Möchte man die Geschwindigkeit der Rakete in Abhängigkeit der Zeit als $v(t)$, so ist die Maße $m$ von $t$ Abhängig. Daraus folgt dann die folgende Gleichung:\\
+
+$\begin{aligned}
+	v(t)=u\cdot \ln\left(\frac{m(t)}{m_0}\right)
+\end{aligned}$\\
+
+Wenn die Annahme getroffen wird, dass der Maße zur Zeit linear abnimmt also Treibstoffverbrauch ist konstant ist, gilt:\\
+
+$\begin{aligned}
+	\tilde{m}'(t) = k
+\end{aligned}$\\
+
+Daraus folgt dann.\\
+
+$\begin{aligned}
+	\int_{0}^{t}\tilde{m}'(\tilde{t})d\tilde{t} = \int_{0}^{t}kd\tilde{t} = k\cdot t
+\end{aligned}$\\
+
+Aus der Oberen Gleichung kann man die Gleichung für $m(t)$ bestimmen. Diese lautet:\\
+
+$\begin{aligned}
+	m(t) = m_0 - kt
+\end{aligned}$\\
+
+Mit der Gleichung $m(t)$ kann hat man nun die Gleichung $v(t)$ bestimmen. Diese lautet:\\
+
+$\begin{aligned}
+	v(t)=u\cdot \ln\left(\frac{m_0 - kt}{m_0}\right) = u\cdot \ln\left(1 - \frac{kt}{m_0}\right)
+\end{aligned}$
+
+
+\end{document}
