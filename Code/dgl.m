@@ -14,7 +14,7 @@ orbitHeight = 400000;%400km height of orbit
 vOrbit = sqrt(G*M/orbitHeight);%velocity to stay in orbit
 
 brennschluss = ceil((m0-m0_min) / dm);
-tspan= 0:0.1:(brennschluss+40000);
+tspan= 0:0.1:(brennschluss+100000);
 startPosX = 0;
 startPosY = h;
 startVX = 0;
@@ -26,15 +26,15 @@ startVY = 0;
 for i=2:3
     deltaTBrennschluss = i;
     crashed = false;
-    deltaPhi = 0.13;
+    deltaPhi = 0.14;
     [tspan,pos1]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
     crashed = false;
-    deltaPhi = 0.14;
+    deltaPhi = 0.16;
     [tspan,pos2]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
     crashed = false;
-    deltaPhi = 0.15;
+    deltaPhi = 0.18;
     [tspan,pos3]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
     sX1 = pos1(:,1);
@@ -51,14 +51,14 @@ for i=2:3
     vY3 = pos3(:,4);
 
     %plot v
-    figure
-    hold on
-    plot(tspan,sqrt(vX1.^2+vY1.^2));
-    plot(tspan,sqrt(vX2.^2+vY2.^2));
-    plot(tspan,sqrt(vX3.^2+vY3.^2));
-    title('v');
-    hold off
-    legend('v1','v2','v3');
+%     figure
+%     hold on
+%     plot(tspan,sqrt(vX1.^2+vY1.^2));
+%     plot(tspan,sqrt(vX2.^2+vY2.^2));
+%     plot(tspan,sqrt(vX3.^2+vY3.^2));
+%     title('v');
+%     hold off
+%     legend('v1','v2','v3');
 
     %plot moon, orbit and trajectory
     figure
@@ -104,7 +104,7 @@ if(t < brennschluss)
         %angle before deltaPhi defines the starting angle at which rocket
         %will turn, pi/2 is in y direction, pi/4 is middle between y and x
         %axis so 45 degree
-        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(startAngle-deltaPhi*t);sin(startAngle-deltaPhi*t);]; %acceleration of rocket vektorial for curve
+        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(startAngle-deltaPhi*(t-deltaTBrennschluss));sin(startAngle-deltaPhi*(t-deltaTBrennschluss))]; %acceleration of rocket vektorial for curve
         %disp(pi/2-deltaPhi*t);
     end
 else
