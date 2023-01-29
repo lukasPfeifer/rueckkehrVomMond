@@ -1,4 +1,4 @@
-global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed radiusMoon
+global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed radiusMoon startAngle
 dm      = 20;   %Gewichtsabnahme pro Zeitschritt
 m0 = 270;%3700; %Anfangsgewicht um auf 3,5k m/s zu kommen ca. 800-900 
 m0_min  = 100;  %Endgewicht
@@ -8,6 +8,7 @@ G       = 6.67430*10^-11;   %Gravitationskonstante
 M       = 7.3483*10^22;     %Mondmasse
 h       = 1737.4*10^3;      %Starthöhe, entspricht Radius des Mondes, cant be global or it will not work anymore
 radiusMoon = h;
+startAngle = pi/4;
 
 orbitHeight = 400000;%400km height of orbit
 vOrbit = sqrt(G*M/orbitHeight);%velocity to stay in orbit
@@ -82,7 +83,7 @@ end
 
 %y(1):sX  y(2):vX  y(3):sY  y(4):vY
 function [fx] = bdgl(t,y)
-global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed radiusMoon
+global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed radiusMoon startAngle
 %h       = 1737.4*10^3;      %start height, radius of moon
 %h = h+sqrt(y(2)^2+y(4)^2)*t;%calculate height, only for start because not vektorial at the moment
 h = sqrt(y(1)^2+y(3)^2);
@@ -94,14 +95,16 @@ if(t < brennschluss)
 else
     m = m0_min; %if brennschlusss then no more loss of mass
 end
+
+%if(t < deltaTBrennschluss || ((t > deltaTBrennschluss + 5) && (t < brennschluss + 5)))
 if(t < brennschluss)
-    if(t < (brennschluss - (brennschluss-deltaTBrennschluss)))
+    if(t < deltaTBrennschluss)%until deltaTBrennschluss just start without turning
         aRakete = (dm*v_gas)/(m0-dm*t)*[0;1]; %acceleration of rocket vektorial for start
     else
         %angle before deltaPhi defines the starting angle at which rocket
         %will turn, pi/2 is in y direction, pi/4 is middle between y and x
         %axis so 45 degree
-        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(pi/4-deltaPhi*t);sin(pi/4-deltaPhi*t);]; %acceleration of rocket vektorial for curve
+        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(startAngle-deltaPhi*t);sin(startAngle-deltaPhi*t);]; %acceleration of rocket vektorial for curve
         %disp(pi/2-deltaPhi*t);
     end
 else
