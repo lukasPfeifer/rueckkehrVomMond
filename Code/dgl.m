@@ -1,13 +1,15 @@
+close all;
+clear;
 global m0 dm v_gas G M  brennschluss deltaPhi m0_min
 dm      = 20;   %Gewichtsabnahme pro Zeitschritt
-m0 = 200;%3700; %Anfangsgewicht um auf 3,5k m/s zu kommen ca. 800-900 
+m0 = 1200;%3700; %Anfangsgewicht um auf 3,5k m/s zu kommen ca. 800-900 
 m0_min  = 100;  %Endgewicht
 v0=0;           %Anfangsgeschwindigkeit
 v_gas   = 2500;             %Austrittsgeschwindigkeit des Gases
 G       = 6.67430*10^-11;   %Gravitationskonstante
 M       = 7.3483*10^22;     %Mondmasse
 h       = 1737.4*10^3;      %Starthöhe, entspricht Radius des Mondes, cant be global or it will not work anymore
-deltaPhi = 0.1;
+deltaPhi = 0.19;
 orbitHeight = 400000;%400km height of orbit
 vOrbit = sqrt(G*M/orbitHeight);%velocity to stay in orbit
 
@@ -74,7 +76,7 @@ if(t < brennschluss)
         %angle before deltaPhi defines the starting angle at which rocket
         %will turn, pi/2 is in y direction, pi/4 is middle between y and x
         %axis so 45 degree
-        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(pi/4-deltaPhi*t);sin(pi/4-deltaPhi*t);]; %acceleration of rocket vektorial for curve
+        aRakete = (dm*v_gas)/(m0-dm*t)*[cos(deltaPhi*t + 1.1588*pi); sin(1.9*deltaPhi*t + 2.04888*pi)]; %acceleration of rocket vektorial for curve
         %disp(pi/2-deltaPhi*t);
     end
 else
