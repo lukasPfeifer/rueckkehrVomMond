@@ -54,11 +54,17 @@ for i=18:2:22
         %     deltaPhi = (startAngle - endAngle)/(brennschluss-deltaTBrennschluss);
         %     [tspan,pos3]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
         %     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
+        
         sX1 = pos1(:,1);
         sY1 = pos1(:,3);
         vX1 = pos1(:,2);
         vY1 = pos1(:,4);
         plot(sX1,sY1);
+        %%for plot over time not instantly
+%         for k=1:length(sX1)
+%             plot(sX1(1:k),sY1(1:k));
+%             pause(0.000000001)
+%         end
     end
     axis([-5.5*10^6 5.5*10^6 -5.5*10^6 5.5*10^6])
     title('moon, destinated orbit and rocket trajectory');
