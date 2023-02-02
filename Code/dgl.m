@@ -24,22 +24,22 @@ startVY = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %for loop for tessting and plotting different scenarios
 
-for i=19:21
+for i=18:2:22
     deltaTBrennschluss = i;
     endAngle = -pi/4-0.1;
     figure
     hold on
     th = 0:pi/50:2*pi;
     xunit = radiusMoon * cos(th);
-    xUnit2 = (orbitHeight + radiusMoon) * cos(th);
+    %xUnit2 = (orbitHeight + radiusMoon) * cos(th);
     yunit = radiusMoon * sin(th);
-    yUnit2 = (orbitHeight + radiusMoon)* sin(th);
+    %yUnit2 = (orbitHeight + radiusMoon)* sin(th);
     plot(xunit, yunit);
-    plot(xUnit2,yUnit2);
+   % plot(xUnit2,yUnit2);
 %     plot(sX2,sY2);
 %     plot(sX3,sY3);
     %axis([-4*10^6 4*10^6 -5*10^6 5*10^6])
-    for j=(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.9:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.05:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*1.1
+    for j=(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.9:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.1:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*1.1
         crashed = false;
         deltaPhi = j;
         [tspan,pos1]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
@@ -60,9 +60,10 @@ for i=19:21
         vY1 = pos1(:,4);
         plot(sX1,sY1);
     end
+    axis([-5.5*10^6 5.5*10^6 -5.5*10^6 5.5*10^6])
     title('moon, destinated orbit and rocket trajectory');
     hold off
-    legend('moon','destinated orbit','rocket trajectory1','rocket trajectory2','rocket trajectory3');
+    legend('moon','rocket trajectory1','rocket trajectory2','rocket trajectory3');
 %     sX2 = pos2(:,1);
 %     sY2 = pos2(:,3);
 %     vX2 = pos2(:,2);
@@ -111,7 +112,7 @@ global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed 
 h = sqrt(y(1)^2+y(3)^2);
 if(h < radiusMoon)
     crashed = true;
-    disp(h);
+    %disp(h);
 end
 if(t < brennschluss)
     m = m0 - dm*t;                  %calculate the rocket mass over time
