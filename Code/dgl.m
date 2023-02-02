@@ -1,20 +1,21 @@
 global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed radiusMoon startAngle
 dm      = 20;   %Gewichtsabnahme pro Zeitschritt
-m0 = 270;%3700; %Anfangsgewicht um auf 3,5k m/s zu kommen ca. 800-900 
-m0_min  = 100;  %Endgewicht
+m0 = 3500;%3700; %Anfangsgewicht um auf 3,5k m/s zu kommen ca. 800-900 
+m0_min  = 1000;  %Endgewicht
 v0=0;           %Anfangsgeschwindigkeit
-v_gas   = 2500;             %Austrittsgeschwindigkeit des Gases
+v_gas   = 2000;             %Austrittsgeschwindigkeit des Gases
 G       = 6.67430*10^-11;   %Gravitationskonstante
 M       = 7.3483*10^22;     %Mondmasse
 h       = 1737.4*10^3;      %Starthöhe, entspricht Radius des Mondes, cant be global or it will not work anymore
-radiusMoon = h;
+radiusMoon = 1737.4*10^3;
 startAngle = pi/4;
+
 
 orbitHeight = 400000;%400km height of orbit
 vOrbit = sqrt(G*M/orbitHeight);%velocity to stay in orbit
 
 brennschluss = ceil((m0-m0_min) / dm);
-tspan= 0:0.1:(brennschluss+100000);
+tspan= 0:0.1:(brennschluss+40000);
 startPosX = 0;
 startPosY = h;
 startVX = 0;
@@ -23,32 +24,53 @@ startVY = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %for loop for tessting and plotting different scenarios
 
-for i=2:3
+for i=19:21
     deltaTBrennschluss = i;
-    crashed = false;
-    deltaPhi = 0.14;
-    [tspan,pos1]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
-    disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
-    crashed = false;
-    deltaPhi = 0.16;
-    [tspan,pos2]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
-    disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
-    crashed = false;
-    deltaPhi = 0.18;
-    [tspan,pos3]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
-    disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
-    sX1 = pos1(:,1);
-    sY1 = pos1(:,3);
-    vX1 = pos1(:,2);
-    vY1 = pos1(:,4);
-    sX2 = pos2(:,1);
-    sY2 = pos2(:,3);
-    vX2 = pos2(:,2);
-    vY2 = pos2(:,4);
-    sX3 = pos3(:,1);
-    sY3 = pos3(:,3);
-    vX3 = pos3(:,2);
-    vY3 = pos3(:,4);
+    endAngle = -pi/4-0.1;
+    figure
+    hold on
+    th = 0:pi/50:2*pi;
+    xunit = radiusMoon * cos(th);
+    xUnit2 = (orbitHeight + radiusMoon) * cos(th);
+    yunit = radiusMoon * sin(th);
+    yUnit2 = (orbitHeight + radiusMoon)* sin(th);
+    plot(xunit, yunit);
+    plot(xUnit2,yUnit2);
+%     plot(sX2,sY2);
+%     plot(sX3,sY3);
+    %axis([-4*10^6 4*10^6 -5*10^6 5*10^6])
+    for j=(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.9:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*0.05:(startAngle - endAngle)/(brennschluss-deltaTBrennschluss)*1.1
+        crashed = false;
+        deltaPhi = j;
+        [tspan,pos1]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
+        disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
+        %     crashed = false;
+        %     endAngle = -pi/4-0.1;
+        %     deltaPhi = (startAngle - endAngle)/(brennschluss-deltaTBrennschluss);
+        %     [tspan,pos2]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
+        %     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
+        %     crashed = false;
+        %     endAngle = -pi/4+0.1;
+        %     deltaPhi = (startAngle - endAngle)/(brennschluss-deltaTBrennschluss);
+        %     [tspan,pos3]=ode45(@bdgl, tspan, [startPosX;startVX;startPosY;startVY]);
+        %     disp(crashed+", "+deltaPhi+", "+deltaTBrennschluss);
+        sX1 = pos1(:,1);
+        sY1 = pos1(:,3);
+        vX1 = pos1(:,2);
+        vY1 = pos1(:,4);
+        plot(sX1,sY1);
+    end
+    title('moon, destinated orbit and rocket trajectory');
+    hold off
+    legend('moon','destinated orbit','rocket trajectory1','rocket trajectory2','rocket trajectory3');
+%     sX2 = pos2(:,1);
+%     sY2 = pos2(:,3);
+%     vX2 = pos2(:,2);
+%     vY2 = pos2(:,4);
+%     sX3 = pos3(:,1);
+%     sY3 = pos3(:,3);
+%     vX3 = pos3(:,2);
+%     vY3 = pos3(:,4);
 
     %plot v
 %     figure
@@ -61,22 +83,22 @@ for i=2:3
 %     legend('v1','v2','v3');
 
     %plot moon, orbit and trajectory
-    figure
-    hold on
-    th = 0:pi/50:2*pi;
-    xunit = h * cos(th);
-    xUnit2 = (orbitHeight + h) * cos(th);
-    yunit = h * sin(th);
-    yUnit2 = (orbitHeight +h)* sin(th);
-    plot(xunit, yunit);
-    plot(xUnit2,yUnit2);
-    plot(sX1,sY1);
-    plot(sX2,sY2);
-    plot(sX3,sY3);
-    %axis([-4*10^6 4*10^6 -5*10^6 5*10^6])
-    title('moon, destinated orbit and rocket trajectory');
-    hold off
-    legend('moon','destinated orbit','rocket trajectory1','rocket trajectory2','rocket trajectory3');
+%     figure
+%     hold on
+%     th = 0:pi/50:2*pi;
+%     xunit = h * cos(th);
+%     xUnit2 = (orbitHeight + h) * cos(th);
+%     yunit = h * sin(th);
+%     yUnit2 = (orbitHeight +h)* sin(th);
+%     plot(xunit, yunit);
+%     plot(xUnit2,yUnit2);
+%     plot(sX1,sY1);
+%     plot(sX2,sY2);
+%     plot(sX3,sY3);
+%     %axis([-4*10^6 4*10^6 -5*10^6 5*10^6])
+%     title('moon, destinated orbit and rocket trajectory');
+%     hold off
+%     legend('moon','destinated orbit','rocket trajectory1','rocket trajectory2','rocket trajectory3');
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,6 +111,7 @@ global m0 dm v_gas G M  brennschluss deltaPhi m0_min deltaTBrennschluss crashed 
 h = sqrt(y(1)^2+y(3)^2);
 if(h < radiusMoon)
     crashed = true;
+    disp(h);
 end
 if(t < brennschluss)
     m = m0 - dm*t;                  %calculate the rocket mass over time
